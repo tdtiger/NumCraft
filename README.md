@@ -1,36 +1,35 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# NumCraft
+![トップ画面](img/numcraft.png)
 
-## Getting Started
+## Introduction
+ランダムに提示される5枚の数字カードと、+、-、×、÷の4枚の演算子カードを組み合わせて、お題にあった数式を作るゲームです。
+現時点では、2つのゲームモードで遊ぶことができます。
 
-First, run the development server:
+### 最大値モード
+与えれたカードをうまく組み合わせて、できるだけ大きな絶対値を取る式を作りましょう。
+**絶対値**で評価されるので、負の数でもOKです。
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+得点は、$残り時間 \times 10 + 式の絶対値$ で計算されます。
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 目標値モード
+50以下のランダムな値が提示されるので、カードを組み合わせてできるだけその値に近い値を取る式を作りましょう。
+こちらはそのままの値で評価されます。
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+得点は、 $残り時間 \times 10 + (1000 - 目標値との差分 \times 20)$ で計算されます。
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+どちらのモードも残り時間の影響が高くなっていたり、
+カード提示は完全ランダムなので運ゲー要素もかなり大きかったり。
+そこはおいおい調整できたらなと思っています。
 
-To learn more about Next.js, take a look at the following resources:
+### 共通ルール
+- 提示される数字カードの値は1~9
+- 提示される演算子カードは+、-、×、÷、1枚ずつで固定
+- 全てのカードを1回ずつ使用しなければいけない
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 使用技術
+- Next.js
+- React
+- TypeScript
+- Tailwind CSS

@@ -1,3 +1,4 @@
+/* サイト全体に設定されるCSS */
 @import "tailwindcss";
 
 :root {
