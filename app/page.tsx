@@ -306,7 +306,7 @@ export default function Home()
     {
       const difference = Math.abs(value - targetValue);
       const baseScore = Math.max(0, 1000 - difference * 20);
-      const totalScore = baseScore + timeBonus;
+      const totalScore = Math.round(baseScore + timeBonus);
 
       setResult(String(value));
       setScore(
@@ -325,7 +325,7 @@ export default function Home()
     }
 
     const baseScore = Math.floor(Math.abs(value));
-    const totalScore = baseScore + timeBonus;
+    const totalScore = Math.round(baseScore + timeBonus);
 
     setResult(String(value));
     setScore(
@@ -613,6 +613,26 @@ export default function Home()
                         </p>
                       </div>
                   )}
+
+                  <section className = "mt-6 rounded-2xl border border-slate-700 bg-slate-950 p-5 text-left">
+                    <div className = "flex items-center justify-between">
+                      <h3 className = "text-lg font-bold text-white">
+                        ランキング
+                      </h3>
+                      <span className = "rounded-full border border-cyan-400/40 px-3 py-1 text-xs font-bold text-cyan-300">
+                        Coming Soon...
+                      </span>
+                    </div>
+
+                    <div className = "mt-4 rounded-xl border border-dashed border-slate-700 p-5 text-center">
+                      <p className = "text-sm font-bold text-slate-300">
+                        ランキング機能は今後実装予定です。
+                      </p>
+                      <p className = "mt-2 text-sm leading-6 text-slate-500">
+                        将来的には、モード別ランキングをつけられたらなと。
+                      </p>
+                    </div>
+                  </section>
 
                   <button
                     type = "button" onClick = {startGame}
