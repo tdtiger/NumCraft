@@ -84,6 +84,12 @@ export default function Home()
   const [targetValue, setTargetValue] = useState<number | null>(null);
   // ↑こいつらが呼ばれるたびに、状態変更→レンダリング→画面更新
 
+  const today = new Date().toLocaleDateString("ja-JP", {
+    year: "numeric",
+    month: "long",
+    day: "numeric"
+  });
+
   // カードを選択する関数
   const addCard = (card: Card) => 
   {
@@ -387,6 +393,16 @@ export default function Home()
           <p className = "mt-5 text-slate-400">
             数字カードで課題に合わせた式を作ろう
           </p>
+
+          <div className = "mt-4 flex items-center justify-between text-sm text-slate-500">
+            <span>
+              Today's Challenge
+            </span>
+            <span>
+              {today}
+            </span>
+          </div>
+
         </header>
 
         <section className = "mt-12">
