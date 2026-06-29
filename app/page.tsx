@@ -492,8 +492,20 @@ export default function Home()
               )}
 
               <section className = "mt-8 rounded-2xl border border-slate-800 bg-slate-950 p-5 text-center">
-                <p className = "text-sm text-slate-400">残り時間</p>
-                <p className = "mt-1 text-5xl font-black text-cyan-300">{timeLeft}</p>
+                <p className = "text-sm text-slate-400">
+                  残り時間
+                </p>
+                <p className = {`mt-1 text-5xl font-black transition-colors duration-300 ${
+                  timeLeft <= 5
+                    ? "text-red-400 animate-pulse"
+                    : timeLeft <= 10
+                    ? "text-red-400"
+                    : timeLeft <= 30
+                    ? "text-yellow-300"
+                    : "text-cyan-300"
+                }`}>
+                  {timeLeft}
+                </p>
               </section>
 
               <section className = "mt-8">
