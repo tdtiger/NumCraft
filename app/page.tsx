@@ -533,11 +533,11 @@ export default function Home()
                       key = {card.id} type = "button" onClick = {() => addCard(card)} disabled = {card.used}
                       className = 
                       {
-                        `rounded-xl py-4 text-xl font-black transition
+                        `rounded-xl py-4 text-xl font-black transition-all duration-150 active:scale-95
                         ${
                           card.used
-                            ? "bg-slate-800 text-slate-500 cursor-not-allowed"
-                            : "border border-slate-700 bg-slate-950 hover:border-cyan-400 hover:bg-slate-800"
+                            ? "bg-slate-800 text-slate-500 opacity-60 cursor-not-allowed"
+                            : "border border-slate-700 bg-slate-950 shadow-md shadow-black/20 hover:-translate-y-1 hover:scale-105 hover:border-cyan-400 hover:bg-slate-800 hover:shadow-lg hover:shadow-cyan-400/10"
                         }`
                       }
                     >
@@ -561,21 +561,21 @@ export default function Home()
                 <div className = "mt-4 flex gap-3">
                   <button
                     type = "button" onClick = {undoCard}
-                    className = "rounded-xl border border-slate-700 px-5 py-3 font-bold transition hover:bg-slate-800"
+                    className = "rounded-xl border border-slate-700 px-5 py-3 font-bold transition-all duration-150 hover:-translate-y-0.5 hover:bg-slate-800 active:scale-95"
                   >
                     1つ戻す
                   </button>
 
                   <button
                     type = "button" onClick = {clearCards}
-                    className = "rounded-xl border border-slate-700 px-5 py-3 font-bold transition hover:bg-slate-800"
+                    className = "rounded-xl border border-slate-700 px-5 py-3 font-bold transition-all duration-150 hover:-translate-y-0.5 hover:bg-slate-800 active:scale-95"
                   >
                     全て消す
                   </button>
 
                   <button
                     type = "button" onClick = {resetGame}
-                    className = "rounded-xl border border-slate-700 px-5 py-3 font-bold transition hover:bg-slate-800"
+                    className = "rounded-xl border border-slate-700 px-5 py-3 font-bold transition-all duration-150 hover:-translate-y-0.5 hover:bg-slate-800 active:scale-95 "
                   >
                     新しいカード
                   </button>
