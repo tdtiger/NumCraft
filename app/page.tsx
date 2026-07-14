@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { supabase } from "@/lib/supabase";
 
 // 選択できるゲームモードを定義
 type GameMode = "max" | "target" | null;
@@ -82,6 +83,14 @@ export default function Home()
   const [timeLeft, setTimeLeft] = useState(60);
   // 目標値と、それをセットする関数
   const [targetValue, setTargetValue] = useState<number | null>(null);
+  // ニックネームと、それをセットする関数
+  const [nickname, setNickname] = useState("");
+  // 送信中かどうかの状態と、それをセットする関数
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  // 
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  // 
+  const [ranking, setRanking] = useState<any[]>([]);
   // ↑こいつらが呼ばれるたびに、状態変更→レンダリング→画面更新
 
   const today = new Date().toLocaleDateString("ja-JP", {
@@ -377,6 +386,58 @@ export default function Home()
     return true;
   };
 
+  const submitScore = async () =>
+  {
+    if(!nickname.trim())
+    {
+      window.alert("ニックネームを入力してください");
+      return;
+    }
+
+    setIsSubmitted(true);
+
+    const {error} = await supabase
+      .from("scores")
+      .insert({
+        nickname,
+        mode: selectedMode,
+        expression,
+        score: score?.totalScore,
+        result_value: result
+      });
+
+    if(error)
+    {
+      window.alert("スコアの登録に失敗しました");
+      console.error(error);
+    }
+    else
+    {
+      setIsSubmitted(true);
+      await fetchRanking();
+    }
+
+    setIsSubmitting(false);
+  }
+
+  const fetchRanking = async() =>
+  {
+    const {data, error} = await supabase
+      .from("scores")
+      .select("*")
+      .eq("mode", selectedMode)
+      .order("score", {ascending: false})
+      .limit(10);
+
+    if(error)
+    {
+      console.error("ランキングの取得に失敗しました", error);
+      return;
+    }
+
+    setRanking(data ?? []);
+  }
+
   // ブラウザに表示する内容
   return(
     <main className = "min-h-screen bg-slate-950 px-6 py-12 text-white">
@@ -405,7 +466,7 @@ export default function Home()
 
         </header>
 
-        <section className = "mt-12">
+        {/* <section className = "mt-12">
           <label htmlFor = "nickname" className = "mb-2 block text-sm font-semibold text-slate-300">
             ニックネーム
           </label>
@@ -414,7 +475,7 @@ export default function Home()
             id = "nickname" type = "text" placeholder = "名前を入力" maxLength = {20}
             className = "w-full rounded-xl border border-slate-700 bg-slate-900 px-4 py-3 outline-none transition focus:border-cyan-400"
           />
-        </section>
+        </section> */}
 
         <section className = "mt-8 grid gap-5 md:grid-cols-2">
           <article 
@@ -642,24 +703,70 @@ export default function Home()
                       </div>
                   )}
 
+                  <div className = "mt-6 rounded-xl border border-slate-700 bg-slate-900 p-5">
+                    <h3 className = "text-lg font-bold">ランキング登録</h3>
+
+                    <input
+                      type = "text" maxLength = {20} value = {nickname}
+                      onChange = {(e) => setNickname(e.target.value)}
+                      placeholder = "ニックネームを入力"
+                      className = "mt-4 w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 outline-none focus:border-cyan-400"
+                    />
+                    <p className = "mt-2 text-xs text-slate-500">
+                      ※ランキングは公開されます。個人情報を含まないようにしてください。
+                    </p>
+
+                    <button 
+                      type = "button" onClick = {submitScore} disabled = {isSubmitting || isSubmitted}
+                      className = "mt-4 w-full rounded-lg bg-cyan-500 py-3 font-bold text-slate-950transition hover:bg-cyan-400 disabled:opacity-50"
+                    >
+                      {
+                        isSubmitted
+                        ? "登録完了"
+                        :isSubmitting
+                        ? "登録中..."
+                        : "ランキングに登録"
+                      }
+                    </button>
+                  </div>
+
                   <section className = "mt-6 rounded-2xl border border-slate-700 bg-slate-950 p-5 text-left">
                     <div className = "flex items-center justify-between">
                       <h3 className = "text-lg font-bold text-white">
                         ランキング
                       </h3>
                       <span className = "rounded-full border border-cyan-400/40 px-3 py-1 text-xs font-bold text-cyan-300">
-                        Coming Soon...
+                        ※まだまだ未完成
                       </span>
                     </div>
 
-                    <div className = "mt-4 rounded-xl border border-dashed border-slate-700 p-5 text-center">
-                      <p className = "text-sm font-bold text-slate-300">
-                        ランキング機能は今後実装予定です。
+                    {ranking.length === 0 ? (
+                      <p className = "mt-4 text-slate-400">
+                        まだ記録がありません。
                       </p>
-                      <p className = "mt-2 text-sm leading-6 text-slate-500">
-                        将来的には、モード別ランキングをつけられたらなと。
-                      </p>
-                    </div>
+                    ) : (
+                      <div className = "mt-4 space-y-2">
+                        {ranking.map((item, index) => (
+                          <div 
+                            key = {item.id}
+                            className = "flex items-center justify-between rounded-lg bg-slate-800 px-4 py-3"
+                          >
+                            <div>
+                              <p className = "font-bold">
+                                #{index + 1} {item.nickname}
+                              </p>
+                              <p className = "text-xs text-slate-400">
+                                {item.expression}
+                              </p>
+                            </div>
+
+                            <p className = "text-xl font-black text-cyan-300">
+                              {item.score}
+                            </p>
+                          </div>
+                        ))}
+                      </div>
+                    )}
                   </section>
 
                   <button
