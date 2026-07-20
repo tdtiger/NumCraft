@@ -716,18 +716,27 @@ export default function Home()
                       ※ランキングは公開されます。個人情報を含まないようにしてください。
                     </p>
 
+                  {isSubmitted ? (
+                    <div className = "mt-4 rounded-lg border border-emerald-500/30 bg-emerald-500/10 p-4 text-center">
+                      <p className = "font-bold text-emerald-300">
+                        ランキングに登録しました！
+                      </p>
+                      <p className = "mt-1 text-sm text-slate-400">
+                        参加ありがとうございます。
+                      </p>
+                    </div>
+                  ) : (
                     <button 
                       type = "button" onClick = {submitScore} disabled = {isSubmitting || isSubmitted}
                       className = "mt-4 w-full rounded-lg bg-cyan-500 py-3 font-bold text-slate-950transition hover:bg-cyan-400 disabled:opacity-50"
                     >
                       {
-                        isSubmitted
-                        ? "登録完了"
-                        :isSubmitting
+                        isSubmitting
                         ? "登録中..."
                         : "ランキングに登録"
                       }
                     </button>
+                  )}
                   </div>
 
                   <section className = "mt-6 rounded-2xl border border-slate-700 bg-slate-950 p-5 text-left">
